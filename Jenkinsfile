@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('kalinamomkova/******')
+    }
     stages {
         stage('NPM Install') {
             steps {
@@ -19,8 +21,11 @@ pipeline {
         }
         stage('Deploy application') {
             steps {
-                bat 'docker pull kalinamomkova/student-app'
-                bat 'docker-compose -f docker-compose.yml up -d'
+                withCredentials([usernamePassword(credentialsId: 'kalinamomkova/******', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    bat 'docker build -t kalinamomkova/student-app:%BUILD_NUMBER% -t kalinamomkova/student-app:latest .'
+                    bat "docker login -u ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}"
+                    bat 'docker push --all-tags kalinamomkova/student-app'
+                }
             }
         }
     }
