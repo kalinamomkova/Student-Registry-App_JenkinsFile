@@ -20,6 +20,9 @@ pipeline {
             }
         }
         stage('Deploy application') {
+            script {
+              input('Deploy to production')
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: '2f7bc99f-3a08-4092-ba67-b104b60438ff', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     bat 'docker build -t kalinamomkova/student-app:%BUILD_NUMBER% -t kalinamomkova/student-app:latest .'
