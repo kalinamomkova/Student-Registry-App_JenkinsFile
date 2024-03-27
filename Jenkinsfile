@@ -17,5 +17,11 @@ pipeline {
                 bat 'npm run test'
             }
         }
+        stage('Deploy application') {
+            steps {
+                bat 'docker pull kalinamomkova/student-app'
+                bat 'docker-compose -f docker-compose.yml up -d'
+            }
+        }
     }
 }
