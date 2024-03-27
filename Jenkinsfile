@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Run integration tests') {
             steps {
-                bat 'npm run tests'
+                bat 'npm run test'
             }
         }
     }
